@@ -9,6 +9,7 @@ import base64
 import json
 import time
 import re
+import os
 from fastapi import HTTPException, Header, Depends
 
 SECRET_KEY = os.environ["SECRET_KEY"]
