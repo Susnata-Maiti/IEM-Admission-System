@@ -11,7 +11,7 @@ import time
 import re
 from fastapi import HTTPException, Header, Depends
 
-SECRET_KEY = "iem_secret_admission_system_key_2026_nexus"
+SECRET_KEY = os.environ["SECRET_KEY"]
 
 
 def validate_password_strength(password: str) -> tuple[bool, str]:
