@@ -1,0 +1,685 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>IEM Admission System | Nexus P4</title>
+  <link rel="stylesheet" href="/static/styles.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+
+  <!-- Top Navigation Bar -->
+  <header class="navbar">
+    <div class="nav-brand">
+      <div class="brand-crest">
+        <i class="fa-solid fa-graduation-cap"></i>
+      </div>
+      <div class="brand-text">
+        <span class="brand-title">IEM ADMISSION SYSTEM</span>
+        <span class="brand-sub">Institute of Engineering & Management, Salt Lake • Nexus P4</span>
+      </div>
+    </div>
+    <div class="nav-right" id="navAuthSection">
+      <!-- Injected dynamically by app.js -->
+    </div>
+  </header>
+
+  <!-- Notification Toast Container -->
+  <div id="toastContainer" class="toast-container"></div>
+
+  <!-- Main Application Container -->
+  <main class="main-container">
+
+    <!-- 1. AUTH SCREEN (Login & Registration) -->
+    <section id="authSection" class="view-section active">
+      <div class="auth-wrapper">
+        <div class="auth-hero">
+          <div class="hero-badge">PCCCS504 Software Engineering & Project Management</div>
+          <h2>Welcome to the IEM Admissions Portal</h2>
+          <p>Streamlined, fast, and fully integrated admission processing for prospective students, academic review committees, and executive directors.</p>
+          
+          <div class="hero-features">
+            <div class="hf-item">
+              <i class="fa-solid fa-bolt"></i>
+              <div>
+                <strong>Instant Form Validation</strong>
+                <span>Real-time client & server validation on all mandatory inputs</span>
+              </div>
+            </div>
+            <div class="hf-item">
+              <i class="fa-solid fa-file-pdf"></i>
+              <div>
+                <strong>Secure PDF Document Storage</strong>
+                <span>Direct marksheet uploads with file type & 5MB size guards</span>
+              </div>
+            </div>
+            <div class="hf-item">
+              <i class="fa-solid fa-shield-halved"></i>
+              <div>
+                <strong>Role-Based Access & Audit Trail</strong>
+                <span>Salted SHA-256 crypto hashes with complete state transition logs</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="quick-demo-box">
+            <span class="demo-title"><i class="fa-solid fa-key"></i> Quick Demo Logins:</span>
+            <div class="demo-buttons">
+              <button class="btn btn-outline-light" onclick="prefillLogin('priya.sharma@example.com', 'Student@2026!')">
+                <i class="fa-solid fa-user-graduate"></i> Student (Priya)
+              </button>
+              <button class="btn btn-outline-light" onclick="prefillLogin('admin@iem.edu.in', 'Admin@2026!')">
+                <i class="fa-solid fa-user-shield"></i> Admin Panel
+              </button>
+              <button class="btn btn-outline-light" onclick="prefillLogin('director@iem.edu.in', 'Director@2026!')">
+                <i class="fa-solid fa-crown"></i> Director (Dr. Chakrabarti)
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <div class="auth-card">
+          <div class="auth-tabs">
+            <button id="tabLogin" class="auth-tab active" onclick="switchAuthTab('login')">
+              <i class="fa-solid fa-right-to-bracket"></i> Sign In
+            </button>
+            <button id="tabRegister" class="auth-tab" onclick="switchAuthTab('register')">
+              <i class="fa-solid fa-user-plus"></i> Register
+            </button>
+          </div>
+
+          <!-- LOGIN FORM -->
+          <form id="loginForm" class="auth-form" onsubmit="handleLogin(event)">
+            <h3>Sign in to your account</h3>
+            <p class="form-desc">Enter your registered email and credentials below.</p>
+
+            <div class="form-group">
+              <label for="loginEmail">Email Address <span class="req">*</span></label>
+              <div class="input-icon-wrap">
+                <i class="fa-regular fa-envelope"></i>
+                <input type="email" id="loginEmail" placeholder="student@example.com" required>
+              </div>
+            </div>
+
+            <div class="form-group">
+              <label for="loginPassword">Password <span class="req">*</span></label>
+              <div class="input-icon-wrap">
+                <i class="fa-solid fa-lock"></i>
+                <input type="password" id="loginPassword" placeholder="••••••••" required>
+              </div>
+            </div>
+
+            <button type="submit" id="btnLoginSubmit" class="btn btn-primary btn-block">
+              <i class="fa-solid fa-arrow-right-to-bracket"></i> Sign In
+            </button>
+
+            <div class="form-footer">
+              <span>New applicant?</span>
+              <a href="javascript:void(0)" onclick="switchAuthTab('register')">Register here</a>
+            </div>
+          </form>
+
+          <!-- REGISTER FORM (FR-01) -->
+          <form id="registerForm" class="auth-form hidden" onsubmit="handleRegister(event)">
+            <h3>Create Student Account</h3>
+            <p class="form-desc">Register to begin your IEM admission application.</p>
+
+            <div class="form-group">
+              <label for="regName">Full Legal Name <span class="req">*</span></label>
+              <div class="input-icon-wrap">
+                <i class="fa-regular fa-user"></i>
+                <input type="text" id="regName" placeholder="As per official documents" required>
+              </div>
+            </div>
+
+            <div class="form-group">
+              <label for="regEmail">Email Address <span class="req">*</span></label>
+              <div class="input-icon-wrap">
+                <i class="fa-regular fa-envelope"></i>
+                <input type="email" id="regEmail" placeholder="yourname@gmail.com" required>
+              </div>
+            </div>
+
+            <div class="form-group">
+              <label for="regPassword">Password <span class="req">*</span></label>
+              <div class="input-icon-wrap">
+                <i class="fa-solid fa-lock"></i>
+                <input type="password" id="regPassword" placeholder="Min. 8 characters" required oninput="checkPasswordRequirements(this.value)">
+              </div>
+              <ul class="pwd-criteria" id="pwdCriteria">
+                <li id="ruleLength"><i class="fa-solid fa-circle-xmark"></i> At least 8 characters</li>
+                <li id="ruleUpper"><i class="fa-solid fa-circle-xmark"></i> At least 1 uppercase letter</li>
+                <li id="ruleSpecial"><i class="fa-solid fa-circle-xmark"></i> At least 1 special character (!@#$%^&*)</li>
+              </ul>
+            </div>
+
+            <button type="submit" id="btnRegisterSubmit" class="btn btn-primary btn-block">
+              <i class="fa-solid fa-user-check"></i> Register Account
+            </button>
+
+            <div class="form-footer">
+              <span>Already have an account?</span>
+              <a href="javascript:void(0)" onclick="switchAuthTab('login')">Sign In</a>
+            </div>
+          </form>
+
+        </div>
+      </div>
+    </section>
+
+    <!-- 2. STUDENT PORTAL (Dashboard & Application Wizard) -->
+    <section id="studentSection" class="view-section hidden">
+      <div class="student-header-card">
+        <div class="student-profile-info">
+          <div class="avatar-circle">
+            <i class="fa-solid fa-user-graduate"></i>
+          </div>
+          <div>
+            <h2 id="studentWelcomeName">Student Name</h2>
+            <p id="studentEmailLabel">student@example.com</p>
+          </div>
+        </div>
+        <div class="app-status-badge-container">
+          <span class="status-label">Application Status:</span>
+          <span id="studentStatusBadge" class="badge badge-submitted">Draft</span>
+        </div>
+      </div>
+
+      <!-- Mode A: SUBMITTED APPLICATION VIEW (FR-09, FR-10, FR-11 - Locked) -->
+      <div id="studentSubmittedView" class="hidden">
+        <div class="dashboard-grid">
+          
+          <!-- Summary card -->
+          <div class="card">
+            <div class="card-header">
+              <div class="ch-left">
+                <i class="fa-solid fa-clipboard-check"></i>
+                <h3>Application Summary</h3>
+              </div>
+              <span id="subAppCode" class="code-pill">IEM-2026-0847</span>
+            </div>
+            <div class="card-body">
+              <div class="info-row">
+                <span class="info-label">Full Name:</span>
+                <span id="subFullName" class="info-val">-</span>
+              </div>
+              <div class="info-row">
+                <span class="info-label">Date of Birth:</span>
+                <span id="subDob" class="info-val">-</span>
+              </div>
+              <div class="info-row">
+                <span class="info-label">Contact Number:</span>
+                <span id="subContact" class="info-val">-</span>
+              </div>
+              <div class="info-row">
+                <span class="info-label">Residential Address:</span>
+                <span id="subAddress" class="info-val">-</span>
+              </div>
+              <div class="divider"></div>
+              <div class="info-row">
+                <span class="info-label">Selected Course:</span>
+                <span id="subCourse" class="info-val course-highlight">-</span>
+              </div>
+              <div class="info-row">
+                <span class="info-label">Class 10 Score:</span>
+                <span id="subClass10" class="info-val">-</span>
+              </div>
+              <div class="info-row">
+                <span class="info-label">Class 12 Score:</span>
+                <span id="subClass12" class="info-val">-</span>
+              </div>
+              <div class="info-row">
+                <span class="info-label">Submission Date:</span>
+                <span id="subDate" class="info-val">-</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Lifecycle Timeline card -->
+          <div class="card">
+            <div class="card-header">
+              <div class="ch-left">
+                <i class="fa-solid fa-timeline"></i>
+                <h3>Application Progress</h3>
+              </div>
+            </div>
+            <div class="card-body">
+              <div class="stepper-timeline" id="statusTimeline">
+                <div class="timeline-step completed" id="stepSubmit">
+                  <div class="step-icon"><i class="fa-solid fa-check"></i></div>
+                  <div class="step-content">
+                    <h4>Application Submitted</h4>
+                    <p id="timelineSubTime">Records locked and awaiting officer check</p>
+                  </div>
+                </div>
+                <div class="timeline-step" id="stepDocs">
+                  <div class="step-icon"><i class="fa-solid fa-file-circle-check"></i></div>
+                  <div class="step-content">
+                    <h4>Documents Verification</h4>
+                    <p>PDF marksheet & credentials scrutiny</p>
+                  </div>
+                </div>
+                <div class="timeline-step" id="stepReview">
+                  <div class="step-icon"><i class="fa-solid fa-magnifying-glass"></i></div>
+                  <div class="step-content">
+                    <h4>Academic Review</h4>
+                    <p>Departmental quota & merit review</p>
+                  </div>
+                </div>
+                <div class="timeline-step" id="stepDecision">
+                  <div class="step-icon"><i class="fa-solid fa-flag-checkered"></i></div>
+                  <div class="step-content">
+                    <h4>Final Decision</h4>
+                    <p id="timelineDecisionText">Admissions result announcement</p>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Uploaded Document download card (FR-18) -->
+              <div class="doc-attachment-card">
+                <div class="doc-icon"><i class="fa-solid fa-file-pdf"></i></div>
+                <div class="doc-details">
+                  <strong id="subDocName">marksheet.pdf</strong>
+                  <span>PDF Document • Verified Storage</span>
+                </div>
+                <button class="btn btn-outline" id="btnDownloadDoc" onclick="downloadOwnDocument()">
+                  <i class="fa-solid fa-download"></i> View / Download
+                </button>
+              </div>
+
+              <!-- Remarks Notice if any -->
+              <div id="subRemarksNotice" class="alert alert-info hidden">
+                <i class="fa-solid fa-circle-info"></i>
+                <div id="subRemarksText"><strong>Officer Remarks:</strong> Verification in progress.</div>
+              </div>
+
+              <div class="lock-notice">
+                <i class="fa-solid fa-lock"></i>
+                <span>Your application is locked against further edits in compliance with admission regulation FR-09.</span>
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+      <!-- Mode B: NEW APPLICATION WIZARD (FR-03, FR-04, FR-05, FR-08) -->
+      <div id="studentFormView" class="card">
+        <div class="card-header">
+          <div class="ch-left">
+            <i class="fa-solid fa-pen-to-square"></i>
+            <div>
+              <h3>New Admission Application</h3>
+              <p class="subtitle">Complete all mandatory details and upload your marksheet PDF.</p>
+            </div>
+          </div>
+          <div class="form-steps-nav">
+            <div class="f-step active" id="fStep1">1. Personal</div>
+            <div class="f-step" id="fStep2">2. Academic</div>
+            <div class="f-step" id="fStep3">3. Documents</div>
+            <div class="f-step" id="fStep4">4. Review</div>
+          </div>
+        </div>
+
+        <div class="card-body">
+          <form id="admissionWizardForm" onsubmit="handleWizardSubmit(event)">
+            
+            <!-- STEP 1: Personal Details (FR-03) -->
+            <div id="wizardStep1" class="wizard-pane active">
+              <h4 class="pane-title"><i class="fa-regular fa-id-card"></i> Personal Details</h4>
+              <div class="form-grid-2">
+                <div class="form-group">
+                  <label for="appFullName">Full Legal Name <span class="req">*</span></label>
+                  <input type="text" id="appFullName" placeholder="e.g. Susnata Maiti" required>
+                </div>
+                <div class="form-group">
+                  <label for="appDob">Date of Birth <span class="req">*</span></label>
+                  <input type="date" id="appDob" required>
+                </div>
+                <div class="form-group">
+                  <label for="appContact">Contact Number (Mobile) <span class="req">*</span></label>
+                  <input type="tel" id="appContact" placeholder="+91 98765 43210" required>
+                </div>
+                <div class="form-group">
+                  <label for="appAddress">Permanent Residential Address <span class="req">*</span></label>
+                  <input type="text" id="appAddress" placeholder="Street, City, State, PIN" required>
+                </div>
+              </div>
+              <div class="wizard-actions right">
+                <button type="button" class="btn btn-primary" onclick="goToStep(2)">
+                  Next: Academic Details <i class="fa-solid fa-arrow-right"></i>
+                </button>
+              </div>
+            </div>
+
+            <!-- STEP 2: Academic Record & Course Choice (FR-03, FR-04) -->
+            <div id="wizardStep2" class="wizard-pane hidden">
+              <h4 class="pane-title"><i class="fa-solid fa-book-open"></i> Academic Record & Course Preference</h4>
+              <div class="form-grid-2">
+                <div class="form-group">
+                  <label for="appClass10Marks">Class 10 Marks (%) <span class="req">*</span></label>
+                  <input type="number" step="0.01" min="0" max="100" id="appClass10Marks" placeholder="e.g. 88.5" required>
+                </div>
+                <div class="form-group">
+                  <label for="appClass10Board">Class 10 Board <span class="req">*</span></label>
+                  <input type="text" id="appClass10Board" placeholder="e.g. CBSE / ICSE / WB" required>
+                </div>
+                <div class="form-group">
+                  <label for="appClass12Marks">Class 12 Marks (%) <span class="req">*</span></label>
+                  <input type="number" step="0.01" min="0" max="100" id="appClass12Marks" placeholder="e.g. 84.0" required>
+                </div>
+                <div class="form-group">
+                  <label for="appClass12Board">Class 12 Board <span class="req">*</span></label>
+                  <input type="text" id="appClass12Board" placeholder="e.g. CBSE / ISC / WB" required>
+                </div>
+                <div class="form-group">
+                  <label for="appPassingYear">Year of Passing (Class 12) <span class="req">*</span></label>
+                  <select id="appPassingYear" required>
+                    <option value="2026">2026</option>
+                    <option value="2025" selected>2025</option>
+                    <option value="2024">2024</option>
+                    <option value="2023">2023</option>
+                  </select>
+                </div>
+                <div class="form-group">
+                  <label for="appCourse">Course / Programme Choice <span class="req">*</span></label>
+                  <select id="appCourse" required>
+                    <option value="">-- Select Programme Choice --</option>
+                  </select>
+                </div>
+              </div>
+              <div class="wizard-actions">
+                <button type="button" class="btn btn-outline" onclick="goToStep(1)">
+                  <i class="fa-solid fa-arrow-left"></i> Back
+                </button>
+                <button type="button" class="btn btn-primary" onclick="goToStep(3)">
+                  Next: Document Upload <i class="fa-solid fa-arrow-right"></i>
+                </button>
+              </div>
+            </div>
+
+            <!-- STEP 3: Document Upload (FR-05, FR-06) -->
+            <div id="wizardStep3" class="wizard-pane hidden">
+              <h4 class="pane-title"><i class="fa-solid fa-file-arrow-up"></i> Supporting Document Upload</h4>
+              <p class="pane-sub">Upload your Class 10/12 marksheet or identity proof. Max file size: <strong>5MB</strong>. Allowed format: <strong>PDF only</strong>.</p>
+              
+              <div class="upload-dropzone" id="pdfDropzone" onclick="document.getElementById('fileInput').click()">
+                <i class="fa-solid fa-cloud-arrow-up drop-icon"></i>
+                <h4>Click or Drag & Drop PDF here</h4>
+                <p>Only PDF format up to 5MB is accepted</p>
+                <input type="file" id="fileInput" accept=".pdf,application/pdf" style="display: none;" onchange="handleFileSelection(this.files[0])">
+              </div>
+
+              <div id="uploadStatusBox" class="upload-status-box hidden">
+                <div class="usb-left">
+                  <i class="fa-solid fa-file-pdf"></i>
+                  <div>
+                    <strong id="selectedFileName">filename.pdf</strong>
+                    <span id="selectedFileSize">0 KB</span>
+                  </div>
+                </div>
+                <span class="badge badge-success"><i class="fa-solid fa-check"></i> Validated PDF</span>
+              </div>
+
+              <div class="wizard-actions">
+                <button type="button" class="btn btn-outline" onclick="goToStep(2)">
+                  <i class="fa-solid fa-arrow-left"></i> Back
+                </button>
+                <button type="button" class="btn btn-primary" onclick="goToStep(4)">
+                  Next: Review & Submit <i class="fa-solid fa-arrow-right"></i>
+                </button>
+              </div>
+            </div>
+
+            <!-- STEP 4: Review & Final Submission (FR-08) -->
+            <div id="wizardStep4" class="wizard-pane hidden">
+              <h4 class="pane-title"><i class="fa-solid fa-check-double"></i> Review Application Summary</h4>
+              <p class="pane-sub">Please verify all information carefully. Once submitted, your application will be strictly locked against further edits.</p>
+
+              <div class="review-box">
+                <div class="review-section">
+                  <h5>Personal Information</h5>
+                  <div class="review-grid">
+                    <div><span>Name:</span> <strong id="revName">-</strong></div>
+                    <div><span>DOB:</span> <strong id="revDob">-</strong></div>
+                    <div><span>Contact:</span> <strong id="revPhone">-</strong></div>
+                    <div><span>Address:</span> <strong id="revAddress">-</strong></div>
+                  </div>
+                </div>
+
+                <div class="review-section">
+                  <h5>Academic & Programme Choice</h5>
+                  <div class="review-grid">
+                    <div><span>Course Choice:</span> <strong id="revCourse" class="text-primary">-</strong></div>
+                    <div><span>Passing Year:</span> <strong id="revYear">-</strong></div>
+                    <div><span>Class 10:</span> <strong id="revC10">-</strong></div>
+                    <div><span>Class 12:</span> <strong id="revC12">-</strong></div>
+                  </div>
+                </div>
+
+                <div class="review-section">
+                  <h5>Attached Document</h5>
+                  <div><span>PDF Document:</span> <strong id="revDocName" class="text-success">Not uploaded yet</strong></div>
+                </div>
+              </div>
+
+              <div class="alert alert-warning">
+                <i class="fa-solid fa-triangle-exclamation"></i>
+                <span>By clicking "Submit Application", you certify that the information entered is true and agree to locking the application.</span>
+              </div>
+
+              <div class="wizard-actions">
+                <button type="button" class="btn btn-outline" onclick="goToStep(3)">
+                  <i class="fa-solid fa-arrow-left"></i> Back to Documents
+                </button>
+                <button type="submit" id="btnFinalSubmit" class="btn btn-success">
+                  <i class="fa-solid fa-paper-plane"></i> Final Submit Application
+                </button>
+              </div>
+            </div>
+
+          </form>
+        </div>
+      </div>
+    </section>
+
+    <!-- 3. ADMINISTRATOR & DIRECTOR WORKSPACE (FR-12, FR-15, FR-16, FR-17, FR-19, FR-20) -->
+    <section id="adminSection" class="view-section hidden">
+      
+      <!-- Top Overview Metrics Bar (FR-20, Module 4) -->
+      <div class="metrics-grid">
+        <div class="metric-card mc-total">
+          <div class="mc-icon"><i class="fa-solid fa-users"></i></div>
+          <div class="mc-content">
+            <span class="mc-val" id="metricTotal">0</span>
+            <span class="mc-label">Total Applications</span>
+          </div>
+        </div>
+        <div class="metric-card mc-submitted">
+          <div class="mc-icon"><i class="fa-solid fa-clock"></i></div>
+          <div class="mc-content">
+            <span class="mc-val" id="metricSubmitted">0</span>
+            <span class="mc-label">Pending / Submitted</span>
+          </div>
+        </div>
+        <div class="metric-card mc-review">
+          <div class="mc-icon"><i class="fa-solid fa-magnifying-glass"></i></div>
+          <div class="mc-content">
+            <span class="mc-val" id="metricReview">0</span>
+            <span class="mc-label">Under Review</span>
+          </div>
+        </div>
+        <div class="metric-card mc-accepted">
+          <div class="mc-icon"><i class="fa-solid fa-circle-check"></i></div>
+          <div class="mc-content">
+            <span class="mc-val" id="metricAccepted">0</span>
+            <span class="mc-label">Accepted</span>
+          </div>
+        </div>
+        <div class="metric-card mc-rejected">
+          <div class="mc-icon"><i class="fa-solid fa-circle-xmark"></i></div>
+          <div class="mc-content">
+            <span class="mc-val" id="metricRejected">0</span>
+            <span class="mc-label">Rejected</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Controls Toolbar: Search, Filters, View Modes (NFR-03), CSV Export (FR-12) -->
+      <div class="admin-toolbar card">
+        <div class="toolbar-left">
+          <div class="search-wrap">
+            <i class="fa-solid fa-search"></i>
+            <input type="text" id="adminSearchInput" placeholder="Search by name, code, contact..." oninput="handleSearchFilter()">
+          </div>
+          <select id="filterCourseSelect" onchange="handleSearchFilter()">
+            <option value="">All Courses</option>
+          </select>
+          <select id="filterStatusSelect" onchange="handleSearchFilter()">
+            <option value="">All Statuses</option>
+            <option value="Submitted">Submitted</option>
+            <option value="Under Review">Under Review</option>
+            <option value="Accepted">Accepted</option>
+            <option value="Rejected">Rejected</option>
+          </select>
+        </div>
+
+        <div class="toolbar-right">
+          <!-- View Modes Toggle (NFR-03 Requirement) -->
+          <div class="view-mode-toggle">
+            <button id="btnViewTable" class="btn-toggle active" title="Compact Table View" onclick="setViewMode('table')">
+              <i class="fa-solid fa-table-list"></i> Table
+            </button>
+            <button id="btnViewCard" class="btn-toggle" title="Detailed Card View" onclick="setViewMode('card')">
+              <i class="fa-solid fa-grip"></i> Cards
+            </button>
+          </div>
+
+          <!-- CSV Export Button (FR-12) -->
+          <button class="btn btn-outline" onclick="exportApplicationsCSV()">
+            <i class="fa-solid fa-file-csv"></i> Export CSV
+          </button>
+        </div>
+      </div>
+
+      <!-- TABLE VIEW MODE -->
+      <div id="adminTableView" class="card">
+        <div class="table-responsive">
+          <table class="data-table">
+            <thead>
+              <tr>
+                <th>App ID</th>
+                <th>Applicant Name</th>
+                <th>Course Choice</th>
+                <th>Scores (10 / 12)</th>
+                <th>Submitted Date</th>
+                <th>Status</th>
+                <th>Actions</th>
+              </tr>
+            </thead>
+            <tbody id="applicationsTableBody">
+              <!-- Dynamically populated -->
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- DETAILED CARD VIEW MODE -->
+      <div id="adminCardView" class="cards-grid hidden">
+        <!-- Dynamically populated -->
+      </div>
+
+    </section>
+
+  </main>
+
+  <!-- MODAL: APPLICATION DETAIL & AUDIT TRAIL (FR-13, FR-17, FR-18) -->
+  <div id="appDetailModal" class="modal-overlay hidden">
+    <div class="modal-card">
+      <div class="modal-header">
+        <div class="mh-left">
+          <i class="fa-solid fa-id-card-clip"></i>
+          <div>
+            <h3 id="modalAppCode">IEM-2026-0847</h3>
+            <span id="modalAppName">Applicant Name</span>
+          </div>
+        </div>
+        <button class="btn-close" onclick="closeDetailModal()">&times;</button>
+      </div>
+
+      <div class="modal-body">
+        <div class="modal-grid-2">
+          
+          <!-- Left details column -->
+          <div class="modal-col">
+            <h4 class="subhead"><i class="fa-solid fa-user"></i> Personal & Contact Info</h4>
+            <div class="detail-list">
+              <div><span>Date of Birth:</span> <strong id="mDob">-</strong></div>
+              <div><span>Contact Number:</span> <strong id="mContact">-</strong></div>
+              <div><span>Address:</span> <strong id="mAddress">-</strong></div>
+              <div><span>Course Preference:</span> <strong id="mCourse" class="text-primary">-</strong></div>
+            </div>
+
+            <h4 class="subhead mt-3"><i class="fa-solid fa-graduation-cap"></i> Academic Scores</h4>
+            <div class="detail-list">
+              <div><span>Class 10 Marks:</span> <strong id="mC10Marks">-</strong> (<span id="mC10Board">-</span>)</div>
+              <div><span>Class 12 Marks:</span> <strong id="mC12Marks">-</strong> (<span id="mC12Board">-</span>)</div>
+              <div><span>Year of Passing:</span> <strong id="mPassingYear">-</strong></div>
+            </div>
+
+            <h4 class="subhead mt-3"><i class="fa-solid fa-file-pdf"></i> Uploaded Document</h4>
+            <div class="doc-attachment-card" style="margin-top: 8px;">
+              <div class="doc-icon"><i class="fa-solid fa-file-pdf"></i></div>
+              <div class="doc-details">
+                <strong id="mDocName">marksheet.pdf</strong>
+                <span>Supporting Marksheet</span>
+              </div>
+              <a id="mDocDownloadLink" href="#" target="_blank" class="btn btn-sm btn-outline">
+                <i class="fa-solid fa-external-link"></i> View / Download
+              </a>
+            </div>
+          </div>
+
+          <!-- Right: Audit trail & status update form -->
+          <div class="modal-col">
+            
+            <!-- Admin status update controls (FR-19) -->
+            <div id="adminUpdateControlsBox" class="status-action-box">
+              <h4 class="subhead"><i class="fa-solid fa-pen-nib"></i> Decision & Status Transition</h4>
+              <div class="form-group">
+                <label for="modalNewStatus">Select New Status:</label>
+                <select id="modalNewStatus" class="form-select">
+                  <option value="Under Review">Under Review</option>
+                  <option value="Accepted">Accepted</option>
+                  <option value="Rejected">Rejected</option>
+                </select>
+              </div>
+              <div class="form-group">
+                <label for="modalRemarks">Remarks / Notes:</label>
+                <textarea id="modalRemarks" rows="2" placeholder="e.g. Verified eligibility criteria"></textarea>
+              </div>
+              <button class="btn btn-primary btn-block" onclick="submitStatusUpdate()">
+                <i class="fa-solid fa-check"></i> Save Status Transition
+              </button>
+            </div>
+
+            <!-- Audit Trail (FR-13) -->
+            <h4 class="subhead mt-3"><i class="fa-solid fa-clock-rotate-left"></i> Audit Trail History</h4>
+            <div class="audit-trail-list" id="modalAuditTrail">
+              <!-- Dynamically populated -->
+            </div>
+
+          </div>
+
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script src="/static/app.js"></script>
+</body>
+</html>

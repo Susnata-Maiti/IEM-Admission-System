@@ -1,0 +1,20 @@
+<div class="iem-container">
+  <header class="header">
+    <h1>IEM ADMISSION SYSTEM (MEAN Stack POC)</h1>
+    <p>Module 1 (Multer Upload) • Module 2 (RBAC) • Module 3 (Workflow) • Module 4 (Aggregation)</p>
+  </header>
+
+  <!-- Upload Area (Module 1) -->
+  <section class="card">
+    <h3>1. Document Upload (Multer on Disk & MongoDB Reference)</h3>
+    <input type="file" (change)="onFileSelected($event)" accept=".pdf">
+    <button (click)="uploadMarksheet()" [disabled]="!selectedFile">Upload Marksheet</button>
+    <p *ngIf="uploadMessage" class="msg">{{ uploadMessage }}</p>
+  </section>
+
+  <!-- Admin Metrics (Module 4) -->
+  <section class="card" *ngIf="metrics">
+    <h3>4. Admin Aggregation Dashboard ($group, $match)</h3>
+    <p><strong>Total Submissions:</strong> {{ metrics.total }}</p>
+  </section>
+</div>
