@@ -9,8 +9,22 @@ import hashlib
 import secrets
 from datetime import datetime
 
-DB_FILE = os.path.join(os.path.dirname(os.path.abspath(__file__)), "iem_admission.db")
-UPLOADS_DIR = os.path.join(os.path.dirname(os.path.abspath(__file__)), "uploads")
+IS_VERCEL = os.environ.get("VERCEL") == "1"
+
+if IS_VERCEL:
+    DB_FILE = "/tmp/iem_admission.db"
+    UPLOADS_DIR = "/tmp/iem_admission_uploads"
+else:
+    DB_FILE = os.path.join(
+        os.path.dirname(os.path.abspath(__file__)),
+        "iem_admission.db"
+    )
+    UPLOADS_DIR = os.path.join(
+        os.path.dirname(os.path.abspath(__file__)),
+        "uploads"
+    )
+
+os.makedirs(UPLOADS_DIR, exist_ok=True)
 
 os.makedirs(UPLOADS_DIR, exist_ok=True)
 
