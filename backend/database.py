@@ -57,8 +57,17 @@ MONGO_URI = os.getenv("MONGODB_URI") or os.getenv("MONGO_URI")
 
 if MONGO_URI:
     try:
+        import dns.resolver
+        # Fix for Windows where dnspython cannot detect registry nameservers
+        resolver = dns.resolver.get_default_resolver()
+        if not resolver.nameservers:
+            resolver.nameservers = ['8.8.8.8', '1.1.1.1']
+    except Exception:
+        pass
+
+    try:
         import pymongo
-        mongo_client = pymongo.MongoClient(MONGO_URI, serverSelectionTimeoutMS=4000)
+        mongo_client = pymongo.MongoClient(MONGO_URI, serverSelectionTimeoutMS=5000)
         # Verify connection
         mongo_client.admin.command('ping')
         mongo_db = mongo_client.get_default_database("iem_admission")
