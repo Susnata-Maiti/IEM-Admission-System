@@ -23,12 +23,30 @@ try:
 except ImportError:
     pass
 
-# Document Uploads Directory
-UPLOADS_DIR = os.path.join(os.path.dirname(os.path.abspath(__file__)), "uploads")
-os.makedirs(UPLOADS_DIR, exist_ok=True)
+# Serverless / Vercel Environment Compatibility
+import tempfile
+IS_VERCEL = bool(os.getenv("VERCEL"))
 
-# SQLite File Path
-DB_FILE = os.path.join(os.path.dirname(os.path.abspath(__file__)), "iem_admission.db")
+if IS_VERCEL:
+    base_tmp = tempfile.gettempdir()
+    UPLOADS_DIR = os.path.join(base_tmp, "uploads")
+    DB_FILE = os.path.join(base_tmp, "iem_admission.db")
+    source_db = os.path.join(os.path.dirname(os.path.abspath(__file__)), "iem_admission.db")
+    if os.path.exists(source_db) and not os.path.exists(DB_FILE):
+        import shutil
+        try:
+            shutil.copy2(source_db, DB_FILE)
+        except Exception as e:
+            print(f"[DATABASE] Notice: Could not copy initial SQLite db to temp: {e}")
+else:
+    UPLOADS_DIR = os.path.join(os.path.dirname(os.path.abspath(__file__)), "uploads")
+    DB_FILE = os.path.join(os.path.dirname(os.path.abspath(__file__)), "iem_admission.db")
+
+try:
+    os.makedirs(UPLOADS_DIR, exist_ok=True)
+except OSError:
+    UPLOADS_DIR = os.path.join(tempfile.gettempdir(), "uploads")
+    os.makedirs(UPLOADS_DIR, exist_ok=True)
 
 # Detect MongoDB Atlas
 DB_ENGINE = "sqlite"

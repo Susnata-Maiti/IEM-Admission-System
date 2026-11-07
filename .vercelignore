@@ -1,0 +1,10 @@
+.git
+.vscode
+__pycache__
+*.pyc
+backend/__pycache__
+mean_stack_equivalent
+docs
+.env
+atlas-credentials.env
+run_server.bat

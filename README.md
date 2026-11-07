@@ -115,7 +115,34 @@ python backend/test_suite.py
 
 ---
 
-## 6. (Optional) MEAN Stack Reference Backend
+## 6. Deploying to Vercel (Production Cloud)
+
+The repository includes pre-configured Vercel serverless integration (`vercel.json`, `api/index.py`, `.vercelignore`, and `requirements.txt`).
+
+### Method A: Deploy via GitHub (Recommended)
+1. Push your latest code to your GitHub repository:
+   ```powershell
+   git add .
+   git commit -m "Configure Vercel serverless deployment"
+   git push origin main
+   ```
+2. Log in to [Vercel](https://vercel.com) and click **"Add New Project"** &rarr; **"Import"** your `IEM-Admission-System` repository.
+3. In **Environment Variables**, add:
+   - `MONGODB_URI`: Your MongoDB Atlas connection URI (e.g., `mongodb+srv://...`)
+   - `SECRET_KEY`: `iem_admission_jwt_secret_token_2026`
+4. Under **Network Access** in MongoDB Atlas, ensure `0.0.0.0/0` (allow access from anywhere) is whitelisted so Vercel's dynamic serverless IPs can connect.
+5. Click **Deploy**. Vercel will build the Python serverless function and serve the frontend at your production `.vercel.app` URL.
+
+### Method B: Deploy via Vercel CLI
+```powershell
+npx vercel
+# Follow prompts, then deploy to production:
+npx vercel --prod
+```
+
+---
+
+## 7. (Optional) MEAN Stack Reference Backend
 
 To run the Express + Mongoose POC server:
 ```powershell
@@ -127,7 +154,7 @@ The server will load `.env` via `dotenv` and connect to MongoDB Atlas on `http:/
 
 ---
 
-## 7. Deliverables Directory Structure
+## 8. Deliverables Directory Structure
 
 ```
 IEM Admission System/

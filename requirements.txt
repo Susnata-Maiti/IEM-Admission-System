@@ -2,3 +2,7 @@ fastapi
 uvicorn
 python-multipart
 email-validator
+pydantic
+pymongo>=4.6.0
+dnspython>=2.6.0
+python-dotenv
