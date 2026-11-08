@@ -18,6 +18,8 @@ class RegisterRequest(BaseModel):
         v = v.strip().lower()
         if not re.match(r"^[\w\.-]+@[\w\.-]+\.\w+$", v):
             raise ValueError("Invalid email address format.")
+        if not v.endswith("@gmail.com"):
+            raise ValueError("Registration requires a valid @gmail.com address.")
         return v
 
 

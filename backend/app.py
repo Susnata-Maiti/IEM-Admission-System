@@ -81,6 +81,9 @@ FRONTEND_DIR = os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__fi
 @app.post("/api/auth/register")
 def register(req: RegisterRequest):
     """FR-01: Register new student account with validation and salted password hash."""
+    if not req.email.strip().lower().endswith("@gmail.com"):
+        raise HTTPException(status_code=400, detail="Registration is restricted to Gmail accounts (@gmail.com).")
+
     is_valid, msg = validate_password_strength(req.password)
     if not is_valid:
         raise HTTPException(status_code=400, detail=msg)

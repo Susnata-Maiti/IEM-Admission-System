@@ -5,6 +5,17 @@
 
 ---
 
+## 🌐 Live Production Deployment
+
+The IEM Admission System is deployed and accessible live on **Vercel** backed by **MongoDB Atlas Cloud**:
+
+| Service | Live URL | Description |
+| :--- | :--- | :--- |
+| **Production Web Application** | **[https://iem-admission-system-nexus-p4.vercel.app/](https://iem-admission-system-nexus-p4.vercel.app/)** | Full interactive portal (Student Registration, Admin Dashboard, Director Metrics) |
+| **Interactive API Documentation** | **[https://iem-admission-system-nexus-p4.vercel.app/docs](https://iem-admission-system-nexus-p4.vercel.app/docs)** | OpenAPI / Swagger UI test bench for all REST endpoints |
+
+---
+
 ## 1. Project Overview & Scope
 The **IEM Admission System** is a streamlined, user-focused web application engineered according to the Project Charter, Software Requirements Specification (SRS), and High-Level Design (HLD). It is built specifically for **Windows 11 desktop environments** running **Google Chrome** or **Microsoft Edge**.
 
@@ -116,6 +127,9 @@ python backend/test_suite.py
 ---
 
 ## 6. Deploying to Vercel (Production Cloud)
+
+The application is deployed live in production at:
+👉 **[https://iem-admission-system-nexus-p4.vercel.app/](https://iem-admission-system-nexus-p4.vercel.app/)**
 
 The repository includes pre-configured Vercel serverless integration (`vercel.json`, `api/index.py`, `.vercelignore`, and `requirements.txt`).
 

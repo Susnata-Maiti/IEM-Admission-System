@@ -183,8 +183,14 @@ async function handleLogin(e) {
 async function handleRegister(e) {
   e.preventDefault();
   const name = document.getElementById("regName").value.trim();
-  const email = document.getElementById("regEmail").value.trim();
+  const email = document.getElementById("regEmail").value.trim().toLowerCase();
   const password = document.getElementById("regPassword").value;
+
+  if (!email.endsWith("@gmail.com")) {
+    showToast("Registration is restricted to Gmail accounts. Email must end with @gmail.com", "error");
+    document.getElementById("regEmail").focus();
+    return;
+  }
 
   try {
     const res = await fetch(`${API_BASE}/api/auth/register`, {

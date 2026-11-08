@@ -32,7 +32,7 @@
   margin: 0;
   padding: 0;
   box-sizing: border-box;
-  font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  font-family: 'Google Sans', 'Google Sans Text', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
 }
 
 body {
@@ -64,20 +64,27 @@ body {
 }
 
 .brand-crest {
-  width: 44px;
-  height: 44px;
-  background: linear-gradient(135deg, #1e3a8a, #3b82f6);
-  color: #fff;
-  border-radius: 12px;
+  width: 48px;
+  height: 48px;
+  background: #ffffff;
+  border-radius: 10px;
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 1.4rem;
-  box-shadow: 0 4px 10px rgba(37, 99, 235, 0.25);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+  border: 1px solid var(--border);
+  overflow: hidden;
+  padding: 2px;
+}
+
+.brand-logo-img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
 }
 
 .brand-title {
-  font-family: 'Space Grotesk', sans-serif;
+  font-family: 'Google Sans', sans-serif;
   font-size: 1.15rem;
   font-weight: 700;
   letter-spacing: -0.02em;
@@ -158,9 +165,26 @@ body {
   box-shadow: var(--shadow-lg);
 }
 
+.auth-hero-branding {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  margin-bottom: 1.5rem;
+}
+
+.hero-logo-img {
+  width: 58px;
+  height: 58px;
+  object-fit: contain;
+  background: #ffffff;
+  border-radius: 12px;
+  padding: 4px;
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.15);
+}
+
 .hero-badge {
   display: inline-block;
-  align-self: flex-start;
+  align-self: center;
   background: rgba(255,255,255,0.15);
   backdrop-filter: blur(8px);
   padding: 6px 14px;
@@ -168,11 +192,10 @@ body {
   font-size: 0.8rem;
   font-weight: 600;
   letter-spacing: 0.03em;
-  margin-bottom: 1.5rem;
 }
 
 .auth-hero h2 {
-  font-family: 'Space Grotesk', sans-serif;
+  font-family: 'Google Sans', sans-serif;
   font-size: 2.2rem;
   font-weight: 700;
   line-height: 1.25;
@@ -250,9 +273,51 @@ body {
   border-radius: var(--radius-lg);
   border: 1px solid var(--border);
   box-shadow: var(--shadow-md);
-  padding: 2.5rem;
+  padding: 2.2rem 2.5rem;
   display: flex;
   flex-direction: column;
+}
+
+.auth-card-top-logo {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-bottom: 1.25rem;
+  padding-bottom: 0.85rem;
+  border-bottom: 1px solid var(--border);
+  text-align: center;
+}
+
+.auth-card-logo {
+  width: 62px;
+  height: 62px;
+  object-fit: contain;
+  background: #ffffff;
+  border-radius: 12px;
+  padding: 3px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+}
+
+.auth-card-motto {
+  font-size: 0.78rem;
+  font-weight: 700;
+  color: var(--primary);
+  margin-top: 0.45rem;
+  letter-spacing: 0.4px;
+  text-transform: uppercase;
+}
+
+.email-hint {
+  font-size: 0.76rem;
+  color: var(--text-muted);
+  margin-top: 0.35rem;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+
+.email-hint strong {
+  color: var(--primary);
 }
 
 .auth-tabs {
@@ -524,13 +589,21 @@ textarea:focus {
 .avatar-circle {
   width: 52px;
   height: 52px;
-  border-radius: 50%;
-  background: #eff6ff;
-  color: var(--primary);
+  border-radius: 12px;
+  background: #ffffff;
+  border: 1px solid var(--border);
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 1.4rem;
+  padding: 3px;
+  box-shadow: var(--shadow-sm);
+  overflow: hidden;
+}
+
+.student-avatar-logo {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
 }
 
 .app-status-badge-container {
@@ -930,11 +1003,60 @@ textarea:focus {
 .mc-accepted .mc-icon { background: #d1fae5; color: #065f46; }
 .mc-rejected .mc-icon { background: #fee2e2; color: #991b1b; }
 
+.workspace-header-banner {
+  display: flex;
+  align-items: center;
+  gap: 1.25rem;
+  background: #ffffff;
+  padding: 1.1rem 1.6rem;
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-sm);
+  margin-bottom: 1.5rem;
+  border: 1px solid var(--border);
+  border-left: 5px solid var(--primary);
+}
+
+.workspace-logo-img {
+  width: 58px;
+  height: 58px;
+  object-fit: contain;
+  background: #ffffff;
+  border-radius: 10px;
+  padding: 3px;
+  border: 1px solid var(--border);
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
+}
+
+.whb-text h2 {
+  font-family: 'Google Sans', sans-serif;
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: var(--secondary);
+  margin: 0;
+}
+
+.whb-text p {
+  font-size: 0.85rem;
+  color: var(--text-muted);
+  margin: 0.2rem 0 0 0;
+}
+
+.modal-logo-img {
+  width: 44px;
+  height: 44px;
+  object-fit: contain;
+  background: #ffffff;
+  border-radius: 8px;
+  padding: 2px;
+  border: 1px solid var(--border);
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.06);
+}
+
 .mc-val {
   display: block;
   font-size: 1.6rem;
   font-weight: 800;
-  font-family: 'Space Grotesk', sans-serif;
+  font-family: 'Google Sans', sans-serif;
   color: var(--secondary);
   line-height: 1.1;
 }
