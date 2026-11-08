@@ -358,19 +358,32 @@ def build_paper(output_path):
         "a cloud-native document database (MongoDB Atlas) and an embedded ACID-compliant relational engine (SQLite3)."
     )
 
-    add_callout_box(
-        "[Client Browser (Chrome / Edge)]\n"
-        "         │  HTTP / REST (JSON + Bearer Token)\n"
-        "         ▼\n"
-        "[Application Layer: FastAPI ASGI Server]\n"
-        "         │\n"
-        "         ├──────────────────────────────┐\n"
-        "         ▼                              ▼\n"
-        "[Database Abstraction]       [Document Storage]\n"
-        "  ├─ Primary: MongoDB Atlas  (PDF marksheets on\n"
-        "  └─ Fallback: SQLite3 DB    disk / serverless /tmp)",
-        "Fig. 1. Conceptual Architecture:"
-    )
+    # Figure 1: Publication-grade Architectural Graphic (replacing ASCII callout)
+    fig_path = os.path.join(os.path.dirname(os.path.abspath(__file__)), "fig1_architecture.png")
+    if not os.path.exists(fig_path):
+        from generate_architecture_diagram import draw_architecture_diagram
+        draw_architecture_diagram(fig_path)
+
+    p_fig = doc.add_paragraph()
+    p_fig.alignment = WD_ALIGN_PARAGRAPH.CENTER
+    p_fig.paragraph_format.space_before = Pt(8)
+    p_fig.paragraph_format.space_after = Pt(3)
+    p_fig.paragraph_format.keep_with_next = True
+    run_fig = p_fig.add_run()
+    run_fig.add_picture(fig_path, width=Inches(3.35))
+
+    p_cap = doc.add_paragraph()
+    p_cap.alignment = WD_ALIGN_PARAGRAPH.CENTER
+    p_cap.paragraph_format.space_before = Pt(2)
+    p_cap.paragraph_format.space_after = Pt(8)
+    p_cap.paragraph_format.keep_with_next = False
+    r_lbl = p_cap.add_run("Fig. 1. ")
+    r_lbl.font.name = 'Times New Roman'
+    r_lbl.font.size = Pt(8)
+    r_lbl.font.bold = True
+    r_cap = p_cap.add_run("Conceptual architecture of the dual-engine request-response pipeline and document storage subsystem.")
+    r_cap.font.name = 'Times New Roman'
+    r_cap.font.size = Pt(8)
 
     add_body(
         "Upon process initialization, the backend probes the MongoDB Atlas connection string loaded from environment "
