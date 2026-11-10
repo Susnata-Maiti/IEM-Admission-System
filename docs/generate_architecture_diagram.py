@@ -45,12 +45,12 @@ def draw_architecture_diagram(output_image_path):
         if subtitle:
             # Multi-line title & subtitle
             ax.text(cx, y + h * 0.68, title, ha='center', va='center',
-                    fontsize=9.8, fontweight='bold', color=text_dark, fontfamily=font_family, zorder=4)
-            ax.text(cx, y + h * 0.32, subtitle, ha='center', va='center',
-                    fontsize=8.0, color=text_sub, fontfamily=font_family, zorder=4)
+                    fontsize=11.2, fontweight='bold', color=text_dark, fontfamily=font_family, zorder=4)
+            ax.text(cx, y + h * 0.30, subtitle, ha='center', va='center',
+                    fontsize=9.2, color=text_sub, fontfamily=font_family, zorder=4)
         else:
             ax.text(cx, y + h / 2.0, title, ha='center', va='center',
-                    fontsize=9.5, fontweight='bold', color=text_dark, fontfamily=font_family, zorder=4)
+                    fontsize=10.5, fontweight='bold', color=text_dark, fontfamily=font_family, zorder=4)
 
     # -------------------------------------------------------------
     # 1. PRESENTATION TIER (x: 6 to 94, width: 88, center: 50)
@@ -71,9 +71,9 @@ def draw_architecture_diagram(output_image_path):
     # Centered Badge for Arrow 1
     ax.text(
         50, 79.75, "  HTTP / REST (JSON Payload + Bearer Token)  ",
-        ha='center', va='center', fontsize=7.8, fontweight='bold',
+        ha='center', va='center', fontsize=9.2, fontweight='bold',
         color="#0369a1", fontfamily=font_family,
-        bbox=dict(boxstyle="round,pad=0.25,rounding_size=0.4", facecolor="#ffffff", edgecolor="#94a3b8", lw=0.8, zorder=5)
+        bbox=dict(boxstyle="round,pad=0.25,rounding_size=0.4", facecolor="#ffffff", edgecolor="#94a3b8", lw=0.9, zorder=5)
     )
 
     # -------------------------------------------------------------
@@ -94,9 +94,9 @@ def draw_architecture_diagram(output_image_path):
     )
     ax.text(
         34, 54.0, "  Data Query / Transaction Sync  ",
-        ha='center', va='center', fontsize=7.6, fontweight='bold',
+        ha='center', va='center', fontsize=8.8, fontweight='bold',
         color="#1d4ed8", fontfamily=font_family,
-        bbox=dict(boxstyle="round,pad=0.2,rounding_size=0.4", facecolor="#ffffff", edgecolor="#94a3b8", lw=0.8, zorder=5)
+        bbox=dict(boxstyle="round,pad=0.2,rounding_size=0.4", facecolor="#ffffff", edgecolor="#94a3b8", lw=0.9, zorder=5)
     )
 
     # Arrow 3: Application Tier -> Document Storage Handler (at center x = 80)
@@ -107,9 +107,9 @@ def draw_architecture_diagram(output_image_path):
     )
     ax.text(
         80, 54.0, "  PDF Marksheet Upload (<5MB)  ",
-        ha='center', va='center', fontsize=7.6, fontweight='bold',
+        ha='center', va='center', fontsize=8.8, fontweight='bold',
         color="#334155", fontfamily=font_family,
-        bbox=dict(boxstyle="round,pad=0.2,rounding_size=0.4", facecolor="#ffffff", edgecolor="#94a3b8", lw=0.8, zorder=5)
+        bbox=dict(boxstyle="round,pad=0.2,rounding_size=0.4", facecolor="#ffffff", edgecolor="#94a3b8", lw=0.9, zorder=5)
     )
 
     # -------------------------------------------------------------
@@ -139,9 +139,9 @@ def draw_architecture_diagram(output_image_path):
     )
     ax.text(
         19, 25.5, "  [Primary Engine]  ",
-        ha='center', va='center', fontsize=7.4, fontweight='bold',
+        ha='center', va='center', fontsize=8.6, fontweight='bold',
         color="#15803d", fontfamily=font_family,
-        bbox=dict(boxstyle="round,pad=0.2,rounding_size=0.4", facecolor="#ffffff", edgecolor="#86efac", lw=0.9, zorder=5)
+        bbox=dict(boxstyle="round,pad=0.2,rounding_size=0.4", facecolor="#ffffff", edgecolor="#86efac", lw=1.0, zorder=5)
     )
 
     # Arrow 5: Database Abstraction -> SQLite3 DB (at center x = 49)
@@ -152,9 +152,9 @@ def draw_architecture_diagram(output_image_path):
     )
     ax.text(
         49, 25.5, "  [Failover Engine]  ",
-        ha='center', va='center', fontsize=7.4, fontweight='bold',
+        ha='center', va='center', fontsize=8.6, fontweight='bold',
         color="#c2410c", fontfamily=font_family,
-        bbox=dict(boxstyle="round,pad=0.2,rounding_size=0.4", facecolor="#ffffff", edgecolor="#fdba74", lw=0.9, zorder=5)
+        bbox=dict(boxstyle="round,pad=0.2,rounding_size=0.4", facecolor="#ffffff", edgecolor="#fdba74", lw=1.0, zorder=5)
     )
 
     # Arrow 6: Document Storage Handler -> Disk Storage (at center x = 80)
@@ -165,9 +165,9 @@ def draw_architecture_diagram(output_image_path):
     )
     ax.text(
         80, 25.5, "  [Local /tmp Write]  ",
-        ha='center', va='center', fontsize=7.4, fontweight='bold',
+        ha='center', va='center', fontsize=8.6, fontweight='bold',
         color="#047857", fontfamily=font_family,
-        bbox=dict(boxstyle="round,pad=0.2,rounding_size=0.4", facecolor="#ffffff", edgecolor="#6ee7b7", lw=0.9, zorder=5)
+        bbox=dict(boxstyle="round,pad=0.2,rounding_size=0.4", facecolor="#ffffff", edgecolor="#6ee7b7", lw=1.0, zorder=5)
     )
 
     # -------------------------------------------------------------
