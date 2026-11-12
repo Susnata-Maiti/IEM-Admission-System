@@ -4,7 +4,7 @@ from reportlab.lib.pagesizes import A4
 from reportlab.lib import colors
 from reportlab.lib.units import inch
 from reportlab.platypus import (
-    SimpleDocTemplate, Paragraph, Spacer, Table, TableStyle, KeepTogether, PageBreak, HRFlowable
+    SimpleDocTemplate, Paragraph, Spacer, Table, TableStyle, KeepTogether, PageBreak, HRFlowable, Image
 )
 from reportlab.lib.styles import getSampleStyleSheet, ParagraphStyle
 from reportlab.pdfgen import canvas
@@ -280,42 +280,17 @@ def build_pdf(out_path):
         style_body
     ))
 
-    # Architecture Box Diagram in Table
-    arch_diag = (
-        "┌────────────────────────────────────────────────────────────────────────────────────────┐\n"
-        "│                               MEAN STACK FLOW OF CONTROL                               │\n"
-        "├────────────────────────────────────────────────────────────────────────────────────────┤\n"
-        "│  [Angular 17+ SPA Client] (client/src/app/)                                            │\n"
-        "│        │                                                                               │\n"
-        "│        │  1. Asynchronous HTTP Request (JSON + Bearer JWT Header) via RxJS Observable  │\n"
-        "│        ▼                                                                               │\n"
-        "│  [Node.js Runtime + Express.js Web Server] (server/server.js, port 5000)               │\n"
-        "│        │                                                                               │\n"
-        "│        ├─► Middleware Pipeline:                                                        │\n"
-        "│        │     ├─ cors() & express.json() body parsing                                   │\n"
-        "│        │     ├─ authenticateToken (JWT signature & expiry verification)                 │\n"
-        "│        │     ├─ requireRole(['student', 'admin', 'director']) server-side guard        │\n"
-        "│        │     └─ multer (stream validator, 5MB limit, PDF MIME inspection)              │\n"
-        "│        │                                                                               │\n"
-        "│        ├─► Local File System (/uploads): Streams & saves raw PDF marksheet binary       │\n"
-        "│        │                                                                               │\n"
-        "│        ▼                                                                               │\n"
-        "│  [MongoDB Atlas / Local NoSQL Engine] (via Mongoose ODM models)                        │\n"
-        "│        ├─ users collection (Stores salted bcrypt password hashes)                      │\n"
-        "│        └─ applications collection (Bio-data, scores, docReference, auditTrail array)   │\n"
-        "└────────────────────────────────────────────────────────────────────────────────────────┘"
-    )
-    t_diag = Table([[Paragraph(f"<pre>{arch_diag}</pre>", style_code)]], colWidths=[487])
-    t_diag.setStyle(TableStyle([
-        ('BACKGROUND', (0, 0), (-1, -1), colors.HexColor("#f8fafc")),
-        ('BOX', (0, 0), (-1, -1), 1, C_BORDER),
-        ('TOPPADDING', (0, 0), (-1, -1), 5),
-        ('BOTTOMPADDING', (0, 0), (-1, -1), 5),
-        ('LEFTPADDING', (0, 0), (-1, -1), 8),
-        ('RIGHTPADDING', (0, 0), (-1, -1), 8),
-    ]))
-    story.append(t_diag)
-    story.append(Spacer(1, 8))
+    # Architecture Flow Diagram rendered with Python (Matplotlib)
+    arch_img_path = os.path.join(os.path.dirname(__file__), "mean_architecture_overview.png")
+    if not os.path.exists(arch_img_path):
+        import subprocess
+        gen_script = os.path.join(os.path.dirname(__file__), "generate_mean_architecture_graphic.py")
+        subprocess.run([sys.executable, gen_script], check=True)
+    
+    # Rendered at ultra-sharp 300 DPI, scaled to fit exact 487pt printable width
+    # 2448x1620 -> aspect ratio 1.5111 -> height = 322pt
+    story.append(Image(arch_img_path, width=487, height=322))
+    story.append(Spacer(1, 10))
 
     story.append(Paragraph("2. Component-by-Component Working", style_h1))
     
@@ -364,7 +339,10 @@ def build_pdf(out_path):
         "dispatched to <code>libuv</code>'s thread pool. This guarantees that concurrent applicant requests are handled without blocking.",
         style_body
     ))
-    story.append(Spacer(1, 6))
+    story.append(Spacer(1, 10))
+
+    # Page Break to keep Module Breakdown and Comparison Table together on Page 3
+    story.append(PageBreak())
 
     story.append(Paragraph("3. Implementation of the 4 Core Project Modules", style_h1))
     story.append(Paragraph(
@@ -406,7 +384,7 @@ def build_pdf(out_path):
             ('LEFTPADDING', (0, 0), (-1, -1), 6),
             ('RIGHTPADDING', (0, 0), (-1, -1), 6),
         ]))
-        story.append(m_tbl)
+        story.append(KeepTogether(m_tbl))
         story.append(Spacer(1, 4))
 
     story.append(Spacer(1, 6))
@@ -557,7 +535,9 @@ def build_pdf(out_path):
         ])
     ]
 
-    for cat_title, q_list in viva_qa:
+    for cat_idx, (cat_title, q_list) in enumerate(viva_qa):
+        if cat_idx > 0:
+            story.append(PageBreak())
         story.append(Paragraph(cat_title, style_h1))
         for q_text, a_text in q_list:
             q_box = [
@@ -574,7 +554,7 @@ def build_pdf(out_path):
                 ('LEFTPADDING', (0, 0), (-1, -1), 7),
                 ('RIGHTPADDING', (0, 0), (-1, -1), 7),
             ]))
-            story.append(t_q)
+            story.append(KeepTogether(t_q))
             story.append(Spacer(1, 5))
         story.append(Spacer(1, 6))
 
@@ -605,6 +585,26 @@ def build_pdf(out_path):
     print(f"PDF successfully compiled at: {out_path}")
 
 if __name__ == "__main__":
+    import shutil
     root_dir = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
     target_pdf = os.path.join(root_dir, "MEAN_Stack_POC_Explanation_and_Viva_Guide.pdf")
-    build_pdf(target_pdf)
+    docs_pdf = os.path.join(root_dir, "docs", "MEAN_Stack_POC_Explanation_and_Viva_Guide.pdf")
+    temp_pdf = os.path.join(root_dir, "docs", "temp_mean_build.pdf")
+
+    build_pdf(temp_pdf)
+
+    # Always update docs copy
+    shutil.copyfile(temp_pdf, docs_pdf)
+    print(f"Docs PDF successfully updated at: {docs_pdf}")
+
+    # Try updating root copy (handles Windows file lock if user has PDF open)
+    try:
+        shutil.copyfile(temp_pdf, target_pdf)
+        print(f"Root PDF successfully updated at: {target_pdf}")
+    except PermissionError:
+        fallback_pdf = os.path.join(root_dir, "MEAN_Stack_POC_Explanation_and_Viva_Guide_Reprocessed.pdf")
+        shutil.copyfile(temp_pdf, fallback_pdf)
+        print(f"[NOTE] Root PDF is currently locked in your PDF reader. Successfully saved reprocessed copy at: {fallback_pdf}")
+
+    if os.path.exists(temp_pdf):
+        os.remove(temp_pdf)
