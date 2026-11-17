@@ -7,7 +7,7 @@ import { Observable } from 'rxjs';
 })
 export class AdmissionService {
   // Public Vercel Serverless API endpoint
-  private apiUrl = 'https://iem-admission-system-btgd-nexus-p4.vercel.app/api';
+  private apiUrl = 'https://iem-admission-system-1od2-nexus-p4.vercel.app/api';
 
   constructor(private http: HttpClient) {}
 
