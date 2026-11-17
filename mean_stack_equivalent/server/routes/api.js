@@ -11,12 +11,16 @@ const Application = require('../models/Application');
 
 const JWT_SECRET = process.env.JWT_SECRET || 'iem_admission_jwt_secret_token_2026';
 
+const os = require('os');
+
 // --------------------------------------------------------------------------
 // Module 1: Multer Setup (File on disk, reference in MongoDB)
 // --------------------------------------------------------------------------
 const storage = multer.diskStorage({
   destination: (req, file, cb) => {
-    const uploadDir = path.join(__dirname, '../uploads');
+    const uploadDir = process.env.VERCEL
+      ? path.join(os.tmpdir(), 'uploads')
+      : path.join(__dirname, '../uploads');
     if (!fs.existsSync(uploadDir)) fs.mkdirSync(uploadDir, { recursive: true });
     cb(null, uploadDir);
   },

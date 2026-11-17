@@ -6,7 +6,8 @@ import { Observable } from 'rxjs';
   providedIn: 'root'
 })
 export class AdmissionService {
-  private apiUrl = 'http://localhost:5000/api';
+  // Public Vercel Serverless API endpoint
+  private apiUrl = 'https://iem-admission-system-btgd-nexus-p4.vercel.app/api';
 
   constructor(private http: HttpClient) {}
 
